@@ -11,4 +11,4 @@ descriptions included. Jan-March 2020. Worked with Tim Waters, Randall Dannen an
 
 # Important papers and references
 
-#Ideas and todos
+# Ideas and todos
