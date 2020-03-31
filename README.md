@@ -1,4 +1,4 @@
-** Line-profiles **
+**Line-profiles**
 
 Calculating synthetic line profiles as a part of an exercise. Basic concepts related to line profiles, codes and code
 descriptions included. Jan-March 2020. Worked with Tim Waters, Randall Dannen and Daniel Proga.
