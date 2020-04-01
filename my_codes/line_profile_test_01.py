@@ -28,13 +28,13 @@ nx = 1e8                                 # /cm^3
 
 # reading data from XSTAR lookup table and Athena++ results
 
-Model = 'A'
-Line = 'FeXXV'
+Model = 'B'
+Line = 'OVIII'
 
 if(Model=='A'):
     hydro_file   = "Athenatab/agn1.hep18.merged.out1.01200.tab"
     hydro_file1 =  "Athenatab/agn1.hep18.merged.out2.01200.tab"
-else:
+if(Model=='B'):
     hydro_file   = "Athenatab/agn1.hep17.merged.out1.01200.tab"
     hydro_file1 =  "Athenatab/agn1.hep17.merged.out2.01200.tab"
     
@@ -47,7 +47,7 @@ if(Line=='CIV'):
     lines = [1550.77, 1548.2]
     matom = mp * 12      # mass of target atom in g
 if(Line=='OVIII'):
-    opacity_file = "XSTARtab/o_viii_19_1.dat"
+    opacity_file = "XSTARtab/o_viii_19.dat"
     lines = [18.9725,18.9671]
     matom = mp * 16      # mass of target atom in g
 
@@ -63,7 +63,7 @@ optable   = opacity_table(opacity_file)
 hydroData = read_tab(hydro_file)
 hydroData1 = read_tab(hydro_file1)
 
-ymin = -7e7/C
+ymin = -5e7/C
 ymax = 5e6/C
 Nv=1000
 nu_dist = np.linspace(ymin,ymax,Nv)
@@ -144,14 +144,15 @@ for i,snap in enumerate(lines):
     k0 = []
     vth = []
     vi = []
-    
-    for k in range(len(xis)):
+    for k in range(len(dr)):
         val = optable.get_opacity(np.log10(xis[k]),np.log10(temp[k]),i)
         alpha_array.append(val*n_den[k]/nx)
         k0.append(alpha_array[k]/np.sqrt(pi))
         f0_array.append( (1. + vel[k]/C) )
         vth.append(np.sqrt(2*kb*temp[k]/matom))
+        #print(k)
         vi.append(vth[k]/C)
+    
     
     flux = []
     tau = []
@@ -177,13 +178,14 @@ for i,snap in enumerate(lines):
 
 axs[0].set_ylabel(r"$\tau_\nu$", fontsize=fs,rotation=0,labelpad=14)
 axs[0].set_ylim(0,max(tau)+0.2*max(tau))
-axs[0].set_xlim(-700,50)
+axs[0].set_xlim(ymin*C/1e5,ymax*C/1e5)
 axs[0].legend(frameon=False)
 axs[1].set_ylabel(r"$I_\nu$", fontsize=fs,rotation=0,labelpad=14)
 axs[1].set_xlabel('v [km/s]',fontsize=fs)
 axs[1].set_ylim(min(flux)-0.2*min(flux),1)
-axs[1].set_xlim(-700,50)
+axs[1].set_xlim(ymin*C/1e5,ymax*C/1e5)
 axs[0].set_title('Model '+Model+', '+Line)
+#
 
 for ax in axs:
     ax.minorticks_on()
